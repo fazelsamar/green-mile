@@ -29,11 +29,7 @@ class LoginView(APIView):
                 'msg': 'No active account found with the given credentials',
             }, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            token = Token.objects.filter(user=user)
-            if token.exists():
-                token = token.first()
-            else:
-                token = Token.objects.create(user=user)
+            token, _ = Token.objects.get_or_create(user=user)
             return Response({
                 'token': str(token)
             }, status=status.HTTP_200_OK)
