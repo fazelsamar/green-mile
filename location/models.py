@@ -10,6 +10,9 @@ class Province(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.title
+
 
 class City(models.Model):
     province = models.ForeignKey(Province, on_delete=models.CASCADE)
@@ -17,3 +20,6 @@ class City(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title

@@ -5,6 +5,7 @@ from . import models
 
 class CityInline(admin.TabularInline):
     model = models.City
+    extra = 0
 
 
 @admin.register(models.Province)
