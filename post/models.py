@@ -29,7 +29,16 @@ class PostImage(models.Model):
 
 class PostComment(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     body = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class PostLike(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
