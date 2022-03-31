@@ -39,7 +39,7 @@ class NewCommentView(generics.CreateAPIView):
         return Response(new_comment_ser.data, status=status.HTTP_201_CREATED)
 
 
-class NewCommentView(APIView):
+class NewLikeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, post_id, *args, **kwargs):
@@ -47,7 +47,7 @@ class NewCommentView(APIView):
         user = request.user
         like, created = models.PostLike.objects.get_or_create(
             user=user, post=post)
-        if created:
+        if not created:
             return Response({
                 'msg': 'user already likes this post'
             }, status=status.HTTP_400_BAD_REQUEST)
