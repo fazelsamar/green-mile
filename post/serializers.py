@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from . import models
 
-from location.models import City
+from location.models import Province
 from account.models import MyUser
 
 
@@ -36,9 +36,9 @@ class PostSerializer(serializers.ModelSerializer):
         many=True,
         read_only=True
     )
-    city = serializers.SlugRelatedField(
+    province = serializers.SlugRelatedField(
         slug_field='title',
-        queryset=City.objects.all(),
+        queryset=Province.objects.all(),
     )
     comments = PostCommentSerializer(
         source='postcomment_set',
@@ -55,7 +55,7 @@ class PostSerializer(serializers.ModelSerializer):
             'image',
             'description',
             'postal_address',
-            'city',
+            'province',
             'location',
             'images',
             'comments',

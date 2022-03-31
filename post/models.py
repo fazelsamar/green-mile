@@ -1,6 +1,6 @@
 from django.db import models
 
-from location.models import City
+from location.models import Province
 from account.models import MyUser
 
 # Create your models here.
@@ -11,7 +11,7 @@ class Post(models.Model):
     image = models.ImageField(upload_to='post_image/')
     description = models.TextField()
     postal_address = models.TextField()
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    province = models.ForeignKey(Province, on_delete=models.CASCADE)
     location = models.TextField()
 
     created_at = models.DateTimeField(auto_now_add=True)

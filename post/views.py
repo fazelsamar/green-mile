@@ -13,13 +13,13 @@ class NewPostView(generics.CreateAPIView):
     serializer_class = serializers.PostSerializer
 
 
-class PostByCityView(generics.ListAPIView):
+class PostByProvinceView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = serializers.PostSerializer
 
     def get_queryset(self):
-        city = self.kwargs.get('city')
-        return models.Post.objects.filter(city__title__iexact=city)
+        province = self.kwargs.get('province')
+        return models.Post.objects.filter(province__title__iexact=province)
 
 
 class NewCommentView(generics.CreateAPIView):
