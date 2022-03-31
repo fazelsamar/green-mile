@@ -13,7 +13,13 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.MyUser
-        fields = ['username', 'password']
+        fields = [
+            'username',
+            'password',
+            'first_name',
+            'last_name',
+            'profile_pic',
+        ]
 
     def create(self, validated_data):
         password = validated_data.pop('password')
