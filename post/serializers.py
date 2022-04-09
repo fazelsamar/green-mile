@@ -114,7 +114,7 @@ class PostSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if user.pk:
             return obj.postlike_set.filter(user=user).exists()
-        return "User is not logged in"
+        return False
 
     def create(self, validated_data):
         images_data = self.context.get('view').request.FILES.getlist('images')
