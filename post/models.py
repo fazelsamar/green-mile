@@ -13,6 +13,8 @@ class Post(models.Model):
     postal_address = models.TextField()
     province = models.ForeignKey(Province, on_delete=models.CASCADE)
     location = models.TextField()
+    location_kind = models.TextField()
+    rest_place = models.BooleanField()
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

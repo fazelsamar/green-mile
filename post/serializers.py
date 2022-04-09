@@ -22,12 +22,18 @@ class PostCommentSerializer(serializers.ModelSerializer):
         queryset=MyUser.objects.all(),
     )
 
+    profile_pic = serializers.SerializerMethodField('get_profile_pic')
+
     class Meta:
         model = models.PostComment
         fields = [
             'body',
             'user',
+            'profile_pic',
         ]
+
+    def get_profile_pic(self, obj):
+        return obj.user.profile_pic.url
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -46,6 +52,7 @@ class PostSerializer(serializers.ModelSerializer):
         read_only=True
     )
     likes = serializers.SerializerMethodField('get_likes')
+    does_user_likes = serializers.SerializerMethodField('get_does_user_likes')
 
     class Meta:
         model = models.Post
@@ -58,8 +65,11 @@ class PostSerializer(serializers.ModelSerializer):
             'province',
             'location',
             'images',
+            'location_kind',
+            'rest_place',
             'comments',
             'likes',
+            'does_user_likes',
             'created_at',
             'updated_at',
         ]
@@ -71,6 +81,12 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_likes(self, obj):
         return obj.postlike_set.all().count()
+
+    def get_does_user_likes(self, obj):
+        user = self.context.get('request').user
+        if user.pk:
+            return obj.postlike_set.filter(user=user).exists()
+        return "User not loged in"
 
     def create(self, validated_data):
         images_data = self.context.get('view').request.FILES
