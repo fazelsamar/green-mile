@@ -43,16 +43,22 @@ class PostCommentSerializer(serializers.ModelSerializer):
 
     profile_pic = serializers.SerializerMethodField('get_profile_pic')
 
+    full_name = serializers.SerializerMethodField('get_full_name')
+
     class Meta:
         model = models.PostComment
         fields = [
             'body',
             'user',
             'profile_pic',
+            'full_name',
         ]
 
     def get_profile_pic(self, obj):
         return obj.user.profile_pic.url
+
+    def get_full_name(self, obj):
+        return obj.user.first_name + " " + obj.user.last_name
 
 
 class PostSerializer(serializers.ModelSerializer):
