@@ -16,6 +16,25 @@ class PostImageSerializer(serializers.ModelSerializer):
         ]
 
 
+class PostWelfarePlaceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.PostWelfarePlace
+        fields = [
+            'title',
+            'image',
+        ]
+
+    def create(self, validated_data):
+        post = self.context['post']
+        ModelClass = self.Meta.model
+        instance = ModelClass._default_manager.create(
+            **validated_data,
+            post=post,
+        )
+        return instance
+
+
 class PostCommentSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         slug_field='username',
@@ -51,6 +70,11 @@ class PostSerializer(serializers.ModelSerializer):
         many=True,
         read_only=True
     )
+    welfare_places = PostWelfarePlaceSerializer(
+        source='postwelfareplace_set',
+        many=True,
+        read_only=True
+    )
     likes = serializers.SerializerMethodField('get_likes')
     does_user_likes = serializers.SerializerMethodField('get_does_user_likes')
 
@@ -58,6 +82,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = models.Post
         fields = [
             'id',
+            'user',
             'title',
             'image',
             'description',
@@ -70,11 +95,14 @@ class PostSerializer(serializers.ModelSerializer):
             'comments',
             'likes',
             'does_user_likes',
+            'welfare_places',
             'created_at',
             'updated_at',
         ]
         read_only_fields = [
             'id',
+            'user',
+            'welfare_places',
             'created_at',
             'updated_at',
         ]
@@ -86,13 +114,13 @@ class PostSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if user.pk:
             return obj.postlike_set.filter(user=user).exists()
-        return "User not loged in"
+        return "User is not logged in"
 
     def create(self, validated_data):
-        images_data = self.context.get('view').request.FILES
-        # print(self.context.get('view').request.FILES['images'])
-        post = models.Post.objects.create(**validated_data)
-        for image_data in images_data.values():
+        images_data = self.context.get('view').request.FILES.getlist('images')
+        post = models.Post.objects.create(
+            user=self.context.get('view').request.user, **validated_data)
+        for image_data in images_data:
             models.PostImage.objects.create(post=post, image=image_data)
         return post
 

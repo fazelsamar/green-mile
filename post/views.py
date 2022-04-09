@@ -55,3 +55,24 @@ class NewLikeView(APIView):
         return Response({
             'msg': 'Done'
         }, status=status.HTTP_200_OK)
+
+
+class NewWelfarePlaceView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.PostWelfarePlaceSerializer
+
+    def post(self, request, post_id, *args, **kwargs):
+        post = get_object_or_404(models.Post, id=post_id)
+        if not request.user == post.user:
+            return Response({
+                "msg": "User is not owner of this post",
+            }, status=status.HTTP_400_BAD_REQUEST)
+        new_welfare_place_ser = serializers.PostWelfarePlaceSerializer(data=request.data, context={
+            'request': request,
+            'post': post,
+        })
+        new_welfare_place_ser.is_valid(raise_exception=True)
+        new_welfare_place_obj = new_welfare_place_ser.create(
+            validated_data=new_welfare_place_ser.validated_data
+        )
+        return Response(new_welfare_place_ser.data, status=status.HTTP_201_CREATED)
