@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from . import serializers
 from . import models
@@ -76,3 +78,18 @@ class NewWelfarePlaceView(generics.CreateAPIView):
             validated_data=new_welfare_place_ser.validated_data
         )
         return Response(new_welfare_place_ser.data, status=status.HTTP_201_CREATED)
+
+
+class PostList(generics.ListAPIView):
+    queryset = models.Post.objects.all()
+    # .prefetch_related('postimage') \
+    # .prefetch_related('postcomment') \
+    # .prefetch_related('postlike') \
+    # .prefetch_related('postwelfareplace')
+
+    serializer_class = serializers.PostSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['province__title']
+    search_fields = ['title']
+    ordering_fields = ['updated_at', 'id']
+    permission_classes = [permissions.AllowAny]
