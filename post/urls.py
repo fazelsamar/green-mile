@@ -4,7 +4,10 @@ from . import views
 
 
 urlpatterns = [
+
     path('v1/posts/', views.PostList.as_view()),
+
+    path('v1/post/<int:pk>/', views.PostRetrieve.as_view()),
 
     path('v1/post/new/', views.NewPostView.as_view()),
 

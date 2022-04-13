@@ -93,3 +93,9 @@ class PostList(generics.ListAPIView):
     search_fields = ['title']
     ordering_fields = ['updated_at', 'id']
     permission_classes = [permissions.AllowAny]
+
+
+class PostRetrieve(generics.RetrieveAPIView):
+    queryset = models.Post.objects.all()
+    serializer_class = serializers.PostSerializer
+    permission_classes = [permissions.AllowAny]
