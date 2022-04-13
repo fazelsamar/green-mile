@@ -6,4 +6,4 @@ from django.contrib.auth.models import AbstractUser
 
 class MyUser(AbstractUser):
     profile_pic = models.ImageField(upload_to='profile-pic/')
-    phone_number = models.IntegerField()
+    phone_number = models.IntegerField(null=True, blank=True)
