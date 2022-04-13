@@ -4,6 +4,7 @@ from . import models
 
 admin.site.register(models.PostComment)
 admin.site.register(models.PostLike)
+admin.site.register(models.PostWelfarePlace)
 
 
 class PostimageInline(admin.TabularInline):
